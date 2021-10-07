@@ -174,3 +174,20 @@ func fetchData() -> Int? {
 
 let b1 = fetchData()
 print(b1)
+
+
+//MARK: Установка действий по очистке (Cleanup)
+print("\n//Установка действий по очистке (Cleanup)")
+
+func processFile(filename: String) {
+    defer {
+        print("close1: \(filename)")
+    }
+    defer {
+        print("close2: \(filename)")
+    }
+    print("filename: \(filename)")
+    // close(file) вызывается здесь, в конце зоны видимости.
+}
+
+processFile(filename: "Hello")
