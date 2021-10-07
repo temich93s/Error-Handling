@@ -115,3 +115,62 @@ do {
     print("Unexpected non-vending-machine-related error: \(error)")
 }
 // Выведет "Некорректный вывод, нет в наличии или недостаточно денег."
+
+
+//MARK: Преобразование ошибок в опциональные значения
+print("\n//Преобразование ошибок в опциональные значения")
+
+enum someError: Error {
+    case someError1
+}
+
+func someThrowingFunction() throws -> Int {
+    // ...
+    print("someThrowingFunction()")
+    throw someError.someError1
+    return 0
+}
+ 
+let x = try? someThrowingFunction()
+print(x)
+
+let y: Int?
+do {
+    y = try someThrowingFunction()
+} catch {
+    y = nil
+}
+print(y)
+
+//---
+let a = false
+
+func fetchDataFromDisk() throws -> Int? {
+    print("fetchDataFromDisk")
+    if a {
+        return 0
+    } else {
+        someError.someError1
+        return nil
+    }
+}
+    
+func fetchDataFromServer() throws -> Int? {
+    print("fetchDataFromServer")
+    if a {
+        return 0
+    } else {
+        someError.someError1
+        return nil
+    }
+}
+
+func fetchData() -> Int? {
+    if let data = try? fetchDataFromDisk() { return data }
+    if let data = try? fetchDataFromServer() { return data }
+    return nil
+}
+
+
+let b1 = fetchData()
+print(b1)
