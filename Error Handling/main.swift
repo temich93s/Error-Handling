@@ -80,3 +80,38 @@ struct PurchasedSnack {
         self.name = name
     }
 }
+
+
+//MARK: Обработка ошибок с использованием do-catch
+print("\n//Обработка ошибок с использованием do-catch")
+
+var vendingMachine = VendingMachine()
+vendingMachine.coinsDeposited = 8
+
+do {
+    try buyFavoriteSnack(person: "Alice", vendingMachine: vendingMachine)
+} catch VendingMachineError.invalidSelection {
+    print("Ошибка выбора.")
+} catch VendingMachineError.outOfStock {
+    print("Нет в наличии.")
+} catch VendingMachineError.insufficientFunds(let coinsNeeded) {
+    print("Недостаточно средств. Пожалуйста вставьте еще \(coinsNeeded) монетки.")
+} catch {
+    print("Неожиданная ошибка: \(error).")
+}
+// Выведет "Недостаточно средств. Пожалуйста вставьте еще 2 монетки.
+
+func nourish(with item: String) throws {
+    do {
+        try vendingMachine.vend(itemNamed: item)
+    } catch is VendingMachineError {
+        print("Некорректный вывод, нет в наличии или недостаточно денег.")
+    }
+}
+
+do {
+    try nourish(with: "Beet-Flavored Chips")
+} catch {
+    print("Unexpected non-vending-machine-related error: \(error)")
+}
+// Выведет "Некорректный вывод, нет в наличии или недостаточно денег."
